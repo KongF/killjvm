@@ -64,14 +64,24 @@ func (self *ClassFile) readAndCheckVersion(reader *ClassReader) {
 	}
 	panic("java.lang.UnSupportedClassVersionError!")
 }
-func (self *ClassFile) MinorVersion() uint16 {} // getter
+func (self *ClassFile) MinorVersion() uint16 {
+	return self.minorVersion
+} // getter
 func (self *ClassFile) MajorVersion() uint16 {
 	return self.majorVersion
-}                                                  // getter
-func (self *ClassFile) ConstantPool() ConstantPool {} // getter
-func (self *ClassFile) AccessFlags() uint16        {} // getter
-func (self *ClassFile) Fields() []*MemberInfo      {} // getter
-func (self *ClassFile) Methods() []*MemberInfo     {} // getter
+} // getter
+func (self *ClassFile) ConstantPool() ConstantPool {
+	return self.constantPool
+} // getter
+func (self *ClassFile) AccessFlags() uint16 {
+	return self.accessFlags
+} // getter
+func (self *ClassFile) Fields() []*MemberInfo {
+	return self.fields
+} // getter
+func (self *ClassFile) Methods() []*MemberInfo {
+	return self.methods
+} // getter
 func (self *ClassFile) ClassName() string {
 	return self.constantPool.getClassName(self.thisClass)
 }
