@@ -20,6 +20,8 @@ func readAttribute(reader *ClassReader, cp ConstantPool) AttributeInfo {
 	attrInfo.readInfo(reader)
 	return attrInfo
 }
+
+//todo 补全23种属性
 func newAttributeInfo(attrName string, attrLen uint32, cp ConstantPool) AttributeInfo {
 	switch attrName {
 	case "Code":
