@@ -1,18 +1,22 @@
 package rtda
 
-import (
-	"jvm-go/ch04/rtda"
-)
-
 type Frame struct {
 	lower        *Frame
-	localVars    rtda.LocalVars
+	localVars    LocalVars
 	operandStack *OperandStack
 }
 
-func newFrame(maxLocals, maxStack uint) *Frame {
+func NewFrame(maxLocals, maxStack uint) *Frame {
 	return &Frame{
-		localVars:    newLocalVers(maxLocals),
+		localVars:    newLocalVars(maxLocals),
 		operandStack: newOperandStack(maxStack),
 	}
+}
+
+// getters
+func (self *Frame) LocalVars() LocalVars {
+	return self.localVars
+}
+func (self *Frame) OperandStack() *OperandStack {
+	return self.operandStack
 }
