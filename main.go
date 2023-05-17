@@ -52,23 +52,6 @@ func loadClass(className string, cp *classpath.Classpath) *classfile.ClassFile {
 	}
 	return cf
 }
-func testLocalVars(vars rtda.LocalVars) {
-	vars.SetInt(0, 100)
-	vars.SetInt(1, -100)
-	vars.SetLong(2, 2997924580)
-	vars.SetLong(4, -2997924580)
-	vars.SetFloat(6, 3.1415926)
-	vars.SetDouble(7, 2.71828182845)
-	vars.SetRef(9, nil)
-	println("Print LocalVars")
-	println(vars.GetInt(0))
-	println(vars.GetInt(1))
-	println(vars.GetLong(2))
-	println(vars.GetLong(4))
-	println(vars.GetFloat(6))
-	println(vars.GetDouble(7))
-	println(vars.GetRef(9))
-}
 func testOperandStack(ops *rtda.OperandStack) {
 	ops.PushInt(100)
 	ops.PushInt(-100)
@@ -77,7 +60,6 @@ func testOperandStack(ops *rtda.OperandStack) {
 	ops.PushFloat(3.1415926)
 	ops.PushDouble(2.71828182845)
 	ops.PushRef(nil)
-	println("Print OperandStack")
 	println(ops.PopRef())
 	println(ops.PopDouble())
 	println(ops.PopFloat())
@@ -85,4 +67,21 @@ func testOperandStack(ops *rtda.OperandStack) {
 	println(ops.PopLong())
 	println(ops.PopInt())
 	println(ops.PopInt())
+}
+
+func testLocalVars(vars rtda.LocalVars) {
+	vars.SetInt(0, 100)
+	vars.SetInt(1, -100)
+	vars.SetLong(2, 2997924580)
+	vars.SetLong(4, -2997924580)
+	vars.SetFloat(6, 3.1415926)
+	vars.SetDouble(7, 2.71828182845)
+	vars.SetRef(9, nil)
+	println(vars.GetInt(0))
+	println(vars.GetInt(1))
+	println(vars.GetLong(2))
+	println(vars.GetLong(4))
+	println(vars.GetFloat(6))
+	println(vars.GetDouble(7))
+	println(vars.GetRef(9))
 }
