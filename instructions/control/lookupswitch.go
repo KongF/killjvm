@@ -1,10 +1,22 @@
 package control
 
-import (
-	"killjvm/instructions/base"
-	"killjvm/rtda"
-)
+import "killjvm/instructions/base"
+import "killjvm/rtda"
 
+/*
+lookupswitch
+<0-3 byte pad>
+defaultbyte1
+defaultbyte2
+defaultbyte3
+defaultbyte4
+npairs1
+npairs2
+npairs3
+npairs4
+match-offset pairs...
+*/
+// Access jump table by key match and jump
 type LOOKUP_SWITCH struct {
 	defaultOffset int32
 	npairs        int32
@@ -17,6 +29,7 @@ func (self *LOOKUP_SWITCH) FetchOperands(reader *base.BytecodeReader) {
 	self.npairs = reader.ReadInt32()
 	self.matchOffsets = reader.ReadInt32s(self.npairs * 2)
 }
+
 func (self *LOOKUP_SWITCH) Execute(frame *rtda.Frame) {
 	key := frame.OperandStack().PopInt()
 	for i := int32(0); i < self.npairs*2; i += 2 {

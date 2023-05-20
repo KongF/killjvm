@@ -5,7 +5,7 @@ type MemberInfo struct {
 	accessFlags     uint16
 	nameIndex       uint16
 	descriptorIndex uint16
-	attribute       []AttributeInfo
+	attributes      []AttributeInfo
 }
 
 func readMembers(reader *ClassReader, cp ConstantPool) []*MemberInfo {
@@ -22,7 +22,7 @@ func readMember(reader *ClassReader, cp ConstantPool) *MemberInfo {
 		accessFlags:     reader.readUint16(),
 		nameIndex:       reader.readUint16(),
 		descriptorIndex: reader.readUint16(),
-		attribute:       readAttributes(reader, cp),
+		attributes:      readAttributes(reader, cp),
 	}
 }
 func (self *MemberInfo) AccessFlags() uint16 {
@@ -33,4 +33,56 @@ func (self *MemberInfo) Name() string {
 }
 func (self *MemberInfo) Descriptor() string {
 	return self.cp.getUtf8(self.descriptorIndex)
+}
+func (self *MemberInfo) CodeAttribute() *CodeAttribute {
+	for _, attrInfo := range self.attributes {
+		switch attrInfo.(type) {
+		case *CodeAttribute:
+			return attrInfo.(*CodeAttribute)
+		}
+	}
+	return nil
+}
+
+func (self *MemberInfo) ConstantValueAttribute() *ConstantValueAttribute {
+	for _, attrInfo := range self.attributes {
+		switch attrInfo.(type) {
+		case *ConstantValueAttribute:
+			return attrInfo.(*ConstantValueAttribute)
+		}
+	}
+	return nil
+}
+
+func (self *MemberInfo) ExceptionsAttribute() *ExceptionsAttribute {
+	for _, attrInfo := range self.attributes {
+		switch attrInfo.(type) {
+		case *ExceptionsAttribute:
+			return attrInfo.(*ExceptionsAttribute)
+		}
+	}
+	return nil
+}
+
+func (self *MemberInfo) RuntimeVisibleAnnotationsAttributeData() []byte {
+	return self.getUnparsedAttributeData("RuntimeVisibleAnnotations")
+}
+func (self *MemberInfo) RuntimeVisibleParameterAnnotationsAttributeData() []byte {
+	return self.getUnparsedAttributeData("RuntimeVisibleParameterAnnotationsAttribute")
+}
+func (self *MemberInfo) AnnotationDefaultAttributeData() []byte {
+	return self.getUnparsedAttributeData("AnnotationDefault")
+}
+
+func (self *MemberInfo) getUnparsedAttributeData(name string) []byte {
+	for _, attrInfo := range self.attributes {
+		switch attrInfo.(type) {
+		case *UnparsedAttribute:
+			unparsedAttr := attrInfo.(*UnparsedAttribute)
+			if unparsedAttr.name == name {
+				return unparsedAttr.info
+			}
+		}
+	}
+	return nil
 }

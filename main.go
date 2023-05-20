@@ -5,6 +5,7 @@ import (
 	"killjvm/classfile"
 	"killjvm/classpath"
 	"killjvm/rtda"
+	"strings"
 )
 
 func main() {
@@ -14,14 +15,21 @@ func main() {
 	} else if cmd.helpFlag || cmd.class == "" {
 		printUsage()
 	} else {
-		startJVM(cmd)
+		newJVM(cmd).start()
 	}
 }
 
 func startJVM(cmd *Cmd) {
-	frame := rtda.NewFrame(100, 100)
-	testLocalVars(frame.LocalVars())
-	testOperandStack(frame.OperandStack())
+	cp := classpath.Parse(cmd.XjreOption, cmd.cpOption)
+	className := strings.Replace(cmd.class, ".", "/", -1)
+	cf := loadClass(className, cp)
+	mainMethod := getMainMethod(cf)
+
+	if mainMethod != nil {
+		//interpret(mainMethod)
+	} else {
+		fmt.Printf("Main method not found in class %s\n", cmd.class)
+	}
 }
 
 func printClassInfo(cf *classfile.ClassFile) {
@@ -51,6 +59,14 @@ func loadClass(className string, cp *classpath.Classpath) *classfile.ClassFile {
 		panic(err)
 	}
 	return cf
+}
+func getMainMethod(cf *classfile.ClassFile) *classfile.MemberInfo {
+	for _, m := range cf.Methods() {
+		if m.Name() == "main" && m.Descriptor() == "([Ljava/lang/String; )V" {
+			return m
+		}
+	}
+	return nil
 }
 func testOperandStack(ops *rtda.OperandStack) {
 	ops.PushInt(100)

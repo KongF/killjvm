@@ -1,20 +1,21 @@
 package comparisons
 
-import (
-	"killjvm/instructions/base"
-	"killjvm/rtda"
-)
+import "killjvm/instructions/base"
+import "killjvm/rtda"
 
 // Compare float
 type FCMPG struct{ base.NoOperandsInstruction }
-type FCMPL struct{ base.NoOperandsInstruction }
 
 func (self *FCMPG) Execute(frame *rtda.Frame) {
 	_fcmp(frame, true)
 }
+
+type FCMPL struct{ base.NoOperandsInstruction }
+
 func (self *FCMPL) Execute(frame *rtda.Frame) {
 	_fcmp(frame, false)
 }
+
 func _fcmp(frame *rtda.Frame, gFlag bool) {
 	stack := frame.OperandStack()
 	v2 := stack.PopFloat()

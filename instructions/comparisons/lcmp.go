@@ -1,9 +1,7 @@
 package comparisons
 
-import (
-	"killjvm/instructions/base"
-	"killjvm/rtda"
-)
+import "killjvm/instructions/base"
+import "killjvm/rtda"
 
 // Compare long
 type LCMP struct{ base.NoOperandsInstruction }
